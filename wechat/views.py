@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+import json
+import thread
+
+import time
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.views import View
 from wechat_sdk import WechatBasic
 from wechat_sdk.exceptions import ParseError
 from wechat_sdk.messages import TextMessage
 # Create your views here.
+from wechat.generate_wechat_image import GenerateWechatImage
 
 wechat_instance = WechatBasic(
     token='feifeiwechat',
@@ -46,5 +52,20 @@ class WechatRequest(View):
             if content == '功能':
                 reply_text = '目前支持的功能：\n1. 回复【头像】获取登录二维码'
                 response = wechat_instance.response_text(content=reply_text)
+            elif content == '头像':
+                user = GenerateWechatImage()
+                thread.start_new_thread(user.try_login, ())
+                count = 0
+                while not user.qrcode:
+                    time.sleep(0.7)
+                    count += 1
+                    print('wait...')
+                    if count >= 5:
+                        print('timeout...')
+                        return HttpResponse(response, content_type="application/xml")
+                media_id = json.loads(wechat_instance.upload_media(
+                    'image', user.qrcode, 'png'))['media_id']
+                print('get media_id: %s' % media_id)
+                response = wechat_instance.response_image(media_id=media_id)
         return HttpResponse(response, content_type="application/xml")
 
