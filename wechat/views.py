@@ -44,7 +44,7 @@ class WechatRequest(View):
         if isinstance(message, TextMessage):
             content = message.content.strip()
             if content == '功能':
-                reply_text = ('目前支持的功能：\n1. 回复【头像】获取登录二维码',)
+                reply_text = '目前支持的功能：\n1. 回复【头像】获取登录二维码'
                 response = wechat_instance.response_text(content=reply_text)
         return HttpResponse(response, content_type="application/xml")
 
