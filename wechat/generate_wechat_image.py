@@ -32,7 +32,7 @@ class GenerateWechatImage(object):
         save_path = self.user_name
         if os.path.exists(save_path):
             shutil.rmtree(save_path)
-        os.mkdir(save_path)
+        os.makedirs(save_path)
         friends = itchat.get_friends()
         if get_img_nums > len(friends):
             get_img_nums = len(friends)
@@ -45,11 +45,13 @@ class GenerateWechatImage(object):
             if num > get_img_nums:
                 # print('%s has been writed done' % get_img_nums)
                 break
-        self.generate_image(self.user_name)
+        self.generate_image(save_path)
 
     def generate_image(self, path, gen_filename='multi_img'):
         images = os.listdir(path)
         row_num = int(math.sqrt(len(images)))
+        if row_num == 0:
+            row_num = 1
         slide_size = int(640/row_num)
         thum_size = (slide_size, slide_size)
         toImage = Image.new('RGB', (640, 640))
