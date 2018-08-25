@@ -73,7 +73,8 @@ class WechatRequest(View):
                 file_path = '/'.join([from_user_name, 'multi_img.jpg'])
                 exist_path = os.path.exists(file_path)
                 if not exist_path:
-                    pass
+                    reply_text = '头像生成中...请耐心等待(若未扫码登录则无法获取头像哦!)'
+                    response = wechat_instance.response_text(content=reply_text)
                 else:
                     read_file = open(file_path, str('r+'))
                     media_id = wechat_instance.upload_media(
