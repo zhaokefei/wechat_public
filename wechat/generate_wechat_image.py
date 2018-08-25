@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+from __future__ import unicode_literals
 
 import os
 import math
@@ -9,26 +10,25 @@ from PIL import Image
 
 class GenerateWechatImage(object):
 
-    def __init__(self):
-        self.uuid = None
+    def __init__(self, user_name):
         self.qrcode = None
+        self.user_name = user_name
 
     def try_login(self):
         itchat.auto_login(qrCallback=self.login_qrcode_callback,
                           loginCallback=self.get_friend_imgs)
 
     def login_qrcode_callback(self, uuid, status, qrcode):
-        file_name = uuid + '.jpg'
-        with open(file_name, 'wb') as f:
+        file_name = self.user_name + '.jpg'
+        with open(file_name, str('wb')) as f:
             f.write(qrcode)
-        read_file = open(file_name, 'r+')
+        read_file = open(file_name, str('r+'))
         self.qrcode = read_file
-        self.uuid = uuid
 
     def get_friend_imgs(self, get_img_nums=100):
-        save_path = self.uuid
+        save_path = self.user_name
         if os.path.exists(save_path):
-            save_path = input('path exist: ')
+            os.removedirs(save_path)
         os.mkdir(save_path)
         friends = itchat.get_friends()
         if get_img_nums > len(friends):
@@ -36,13 +36,13 @@ class GenerateWechatImage(object):
             print('friend count： %s' % len(friends))
         for num, friend in enumerate(friends):
             friend_img = itchat.get_head_img(userName=friend['UserName'])
-            with open(save_path + '/' + str(num+1).zfill(3) + '.jpg', 'wb') as f:
+            with open(save_path + '/' + str(num+1).zfill(3) + '.jpg', str('wb')) as f:
                 print('still need to write %s' % (get_img_nums-num))
                 f.write(friend_img)
             if num > get_img_nums:
                 print('%s has been writed done' % get_img_nums)
                 break
-        self.generate_image(self.uuid)
+        self.generate_image(self.user_name)
 
     def generate_image(self, path, gen_filename='multi_img'):
         images = os.listdir(path)

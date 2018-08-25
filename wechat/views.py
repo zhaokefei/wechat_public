@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import json
+import os
 import thread
 
 import time
@@ -41,6 +41,7 @@ class WechatRequest(View):
 
         # 获取解析好的微信请求信息
         message = wechat_instance.get_message()
+        from_user_name = message.pop('FromUserName', '')
 
         # 关注事件以及不匹配时的默认回复
         response = wechat_instance.response_text(
@@ -50,10 +51,11 @@ class WechatRequest(View):
         if isinstance(message, TextMessage):
             content = message.content.strip()
             if content == '功能':
-                reply_text = '目前支持的功能：\n1. 回复【头像】获取登录二维码'
+                reply_text = '目前支持的功能：\n1. 回复【二维码】获取登录二维码\n' \
+                             '2. 扫码成功后，回复【头像】获取头像'
                 response = wechat_instance.response_text(content=reply_text)
-            elif content == '头像':
-                user = GenerateWechatImage()
+            elif content == '二维码':
+                user = GenerateWechatImage(user_name=from_user_name)
                 thread.start_new_thread(user.try_login, ())
                 count = 0
                 while not user.qrcode:
@@ -67,5 +69,16 @@ class WechatRequest(View):
                     'image', user.qrcode)['media_id']
                 print('get media_id: %s' % media_id)
                 response = wechat_instance.response_image(media_id=media_id)
+            elif content == '头像':
+                file_path = '/'.join([from_user_name, 'multi_img.jpg'])
+                exist_path = os.path.exists(file_path)
+                if not exist_path:
+                    pass
+                else:
+                    read_file = open(file_path, str('r+'))
+                    media_id = wechat_instance.upload_media(
+                        'image', read_file)['media_id']
+                    print('get media_id: %s' % media_id)
+                    response = wechat_instance.response_image(media_id=media_id)
         return HttpResponse(response, content_type="application/xml")
 
