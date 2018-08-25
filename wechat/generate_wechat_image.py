@@ -1,9 +1,7 @@
 # -*- coding:utf-8 -*-
 
-import re
 import os
 import math
-import uuid
 
 import itchat
 from PIL import Image
@@ -37,11 +35,9 @@ class GenerateWechatImage(object):
             get_img_nums = len(friends)
             print(u'需要获取的图片数量大于好友数量，取好友数量： %s' % len(friends))
         for num, friend in enumerate(friends):
-            friend_name = friend['NickName'] or friend['UserName']
-            friend_name = re.sub(r'[\s+]', '_', friend_name)
             friend_img = itchat.get_head_img(userName=friend['UserName'])
             with open(save_path + '/' + str(num+1).zfill(3) + '.jpg', 'wb') as f:
-                print(u'正在写入 %s 的图像, 还要写入 %s 个' % (friend_name, get_img_nums-num))
+                print(u'正在写入图像, 还要写入 %s 个' % (get_img_nums-num))
                 f.write(friend_img)
             if num > get_img_nums:
                 print(u'%s 个图片写入完毕' % get_img_nums)
