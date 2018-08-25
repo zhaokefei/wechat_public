@@ -17,6 +17,7 @@ class GenerateWechatImage(object):
     def try_login(self):
         itchat.auto_login(qrCallback=self.login_qrcode_callback,
                           loginCallback=self.get_friend_imgs)
+        itchat.run()
 
     def login_qrcode_callback(self, uuid, status, qrcode):
         file_name = self.user_name + '.jpg'
