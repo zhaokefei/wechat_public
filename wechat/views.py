@@ -41,7 +41,7 @@ class WechatRequest(View):
 
         # 获取解析好的微信请求信息
         message = wechat_instance.get_message()
-        from_user_name = message.pop('FromUserName', '')
+        from_user_name = message.source
 
         # 关注事件以及不匹配时的默认回复
         response = wechat_instance.response_text(
