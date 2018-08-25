@@ -5,6 +5,7 @@ import os
 import math
 
 import itchat
+import shutil
 from PIL import Image
 
 
@@ -30,7 +31,7 @@ class GenerateWechatImage(object):
     def get_friend_imgs(self, get_img_nums=100):
         save_path = self.user_name
         if os.path.exists(save_path):
-            os.removedirs(save_path)
+            shutil.rmtree(save_path)
         os.mkdir(save_path)
         friends = itchat.get_friends()
         if get_img_nums > len(friends):
