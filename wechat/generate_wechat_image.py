@@ -28,19 +28,19 @@ class GenerateWechatImage(object):
     def get_friend_imgs(self, get_img_nums=100):
         save_path = self.uuid
         if os.path.exists(save_path):
-            save_path = input(u'该路径已存在，请输入其他目录路径: ')
+            save_path = input('path exist: ')
         os.mkdir(save_path)
         friends = itchat.get_friends()
         if get_img_nums > len(friends):
             get_img_nums = len(friends)
-            print(u'需要获取的图片数量大于好友数量，取好友数量： %s' % len(friends))
+            print('friend count： %s' % len(friends))
         for num, friend in enumerate(friends):
             friend_img = itchat.get_head_img(userName=friend['UserName'])
             with open(save_path + '/' + str(num+1).zfill(3) + '.jpg', 'wb') as f:
-                print(u'正在写入图像, 还要写入 %s 个' % (get_img_nums-num))
+                print('still need to write %s' % (get_img_nums-num))
                 f.write(friend_img)
             if num > get_img_nums:
-                print(u'%s 个图片写入完毕' % get_img_nums)
+                print('%s has been writed done' % get_img_nums)
                 break
         self.generate_image(self.uuid)
 
@@ -54,12 +54,12 @@ class GenerateWechatImage(object):
         invilid_imgs = []
         for num, img in enumerate(images):
             if img.endswith('.jpg'):
-                print(u'写入第 {} 个图片; 图片名为: {}'.format(num, img))
+                print('write {} picture'.format(num))
                 img = path + '/' + img
                 try:
                     im = Image.open(img)
                 except OSError:
-                    print(u'%s 未写入' % img)
+                    print('%s not write in' % img)
                     invilid_imgs.append(img)
                     continue
                 if im.size != thum_size:
@@ -71,7 +71,6 @@ class GenerateWechatImage(object):
                 if x == row_num:
                     x = 0
                     y += 1
-        print(u'未写入的图片有: {}'.format(' @|@ '.join(invilid_imgs)))
         toImage.save(path + '/' + gen_filename + '.jpg')
-        print(u'生成的文件位于: {}; 名为: {}'.format(path, gen_filename + '.jpg'))
+        print('generator file: {}; name: {}'.format(path, gen_filename + '.jpg'))
 
