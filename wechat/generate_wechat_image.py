@@ -40,7 +40,7 @@ class GenerateWechatImage(object):
             friend_name = friend['NickName'] or friend['UserName']
             friend_name = re.sub(r'[\s+]', '_', friend_name)
             friend_img = itchat.get_head_img(userName=friend['UserName'])
-            with open(save_path + '/' + friend_name + str(num+1).zfill(3) + '.jpg', 'wb') as f:
+            with open(save_path + '/' + str(num+1).zfill(3) + '.jpg', 'wb') as f:
                 print(u'正在写入 %s 的图像, 还要写入 %s 个' % (friend_name, get_img_nums-num))
                 f.write(friend_img)
             if num > get_img_nums:
