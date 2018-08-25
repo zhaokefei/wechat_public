@@ -64,7 +64,7 @@ class WechatRequest(View):
                         print('timeout...')
                         return HttpResponse(response, content_type="application/xml")
                 media_id = json.loads(wechat_instance.upload_media(
-                    'image', user.qrcode, 'png'))['media_id']
+                    'image', user.qrcode, extension='jpg'))['media_id']
                 print('get media_id: %s' % media_id)
                 response = wechat_instance.response_image(media_id=media_id)
         return HttpResponse(response, content_type="application/xml")
