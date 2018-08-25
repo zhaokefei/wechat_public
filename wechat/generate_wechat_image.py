@@ -21,10 +21,11 @@ class GenerateWechatImage(object):
 
     def login_qrcode_callback(self, uuid, status, qrcode):
         file_name = uuid + '.jpg'
-        f = open(file_name, 'wb')
-        f.write(qrcode)
-        read_file = f.read()
-        self.qrcode = read_file
+        with open(file_name, 'wb') as f:
+            f.write(qrcode)
+        read_file = open(file_name, 'rb')
+        content = read_file.read()
+        self.qrcode = content
         self.uuid = uuid
 
     def get_friend_imgs(self, get_img_nums=100):
