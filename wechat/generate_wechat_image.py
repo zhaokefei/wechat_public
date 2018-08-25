@@ -20,9 +20,8 @@ class GenerateWechatImage(object):
                           loginCallback=self.get_friend_imgs)
 
     def login_qrcode_callback(self, uuid, status, qrcode):
-        from StringIO import StringIO
-        f = StringIO()
-        f.write(qrcode)
+        with open(uuid, 'wb') as f:
+            f.write(qrcode)
         self.qrcode = f
         self.uuid = uuid
 
