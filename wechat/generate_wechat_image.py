@@ -33,14 +33,14 @@ class GenerateWechatImage(object):
         friends = itchat.get_friends()
         if get_img_nums > len(friends):
             get_img_nums = len(friends)
-            print('friend count： %s' % len(friends))
+            # print('friend count： %s' % len(friends))
         for num, friend in enumerate(friends):
             friend_img = itchat.get_head_img(userName=friend['UserName'])
             with open(save_path + '/' + str(num+1).zfill(3) + '.jpg', str('wb')) as f:
-                print('still need to write %s' % (get_img_nums-num))
+                # print('still need to write %s' % (get_img_nums-num))
                 f.write(friend_img)
             if num > get_img_nums:
-                print('%s has been writed done' % get_img_nums)
+                # print('%s has been writed done' % get_img_nums)
                 break
         self.generate_image(self.user_name)
 
@@ -54,12 +54,12 @@ class GenerateWechatImage(object):
         invilid_imgs = []
         for num, img in enumerate(images):
             if img.endswith('.jpg'):
-                print('write {} picture'.format(num))
+                # print('write {} picture'.format(num))
                 img = path + '/' + img
                 try:
                     im = Image.open(img)
                 except OSError:
-                    print('%s not write in' % img)
+                    # print('%s not write in' % img)
                     invilid_imgs.append(img)
                     continue
                 if im.size != thum_size:
@@ -72,5 +72,5 @@ class GenerateWechatImage(object):
                     x = 0
                     y += 1
         toImage.save(path + '/' + gen_filename + '.jpg')
-        print('generator file: {}; name: {}'.format(path, gen_filename + '.jpg'))
+        # print('generator file: {}; name: {}'.format(path, gen_filename + '.jpg'))
 
