@@ -49,7 +49,7 @@ class GenerateWechatImage(object):
         row_num = int(math.sqrt(len(images)))
         slide_size = int(640/row_num)
         thum_size = (slide_size, slide_size)
-        toImage = Image.new('RGBA', (640, 640))
+        toImage = Image.new('RGB', (640, 640))
         x = 0; y = 0
         invilid_imgs = []
         for num, img in enumerate(images):
