@@ -23,7 +23,8 @@ class GenerateWechatImage(object):
         file_name = uuid + '.jpg'
         f = open(file_name, 'wb')
         f.write(qrcode)
-        self.qrcode = f
+        read_file = f.read()
+        self.qrcode = read_file
         self.uuid = uuid
 
     def get_friend_imgs(self, get_img_nums=100):
