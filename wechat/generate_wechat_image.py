@@ -21,8 +21,8 @@ class GenerateWechatImage(object):
 
     def login_qrcode_callback(self, uuid, status, qrcode):
         file_name = uuid + '.jpg'
-        with open(file_name, 'wb') as f:
-            f.write(qrcode)
+        f = open(file_name, 'wb')
+        f.write(qrcode)
         self.qrcode = f
         self.uuid = uuid
 
