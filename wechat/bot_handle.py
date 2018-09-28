@@ -60,12 +60,7 @@ def handle_text(message):
             item = ['R' + resource.id + '. ' + resource.name for resource in resources]
             content = '\n'.join(item)
             reply_content = '可根据资源编号查询具体资源信息\n' + content
-    return TextReply(message=message, content=reply_content)
-
-
-@bot.image
-def handle_image(message):
-    return TextReply(message=message, content='暂时无法处理图片信息')
+    return reply_content
 
 
 @bot.subscribe
@@ -86,3 +81,10 @@ def handle_unsubscribe(message):
     User.objects.update_or_create(
         account=account, open_id=message.source,
         defaults={'status': UserStatus.UNSUBSCRIBE})
+
+
+@bot.handler
+def handle_image(message):
+    return '暂时无法处理图片信息'
+
+
