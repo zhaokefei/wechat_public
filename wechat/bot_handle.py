@@ -3,7 +3,7 @@
 import re
 from werobot.replies import TextReply
 
-from wechat.urls import robot as bot
+from wechat.views import robot as bot
 from wechat.models import *
 
 SUBSCRIBE_CONTENT = '欢迎关注'

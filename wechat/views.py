@@ -6,8 +6,13 @@ import html
 
 from django.http import HttpResponseForbidden, HttpResponse, HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
+from werobot import WeRoBot
 
-from wechat.urls import robot
+
+robot = WeRoBot(
+    token='feifeiwechat',
+    app_id='wxde12b488de883dab',
+    app_secret='7b638241ad308dab37f1f2fe7ea97103')
 
 
 @csrf_exempt
