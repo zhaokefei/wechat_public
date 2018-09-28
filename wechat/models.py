@@ -41,6 +41,9 @@ class User(models.Model):
     status = models.IntegerField(default=1, help_text='用户状态')
     create_date = models.DateTimeField(auto_now_add=True)
 
+    def __repr__(self):
+        return self.open_id
+
     class Meta:
         unique_together = ('account', 'open_id')
         db_table = 'user'
