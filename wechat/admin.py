@@ -3,4 +3,12 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-# Register your models here.
+from wechat.models import Account
+
+
+class AccountAdmin(admin.ModelAdmin):
+    form = Account
+    # list页面要显示的字段
+    list_display = ['name', 'open_id']
+
+admin.site.register(Account, AccountAdmin)
