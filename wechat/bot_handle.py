@@ -19,20 +19,20 @@ def handle_text(message):
     if content == '分类':
         categories = Category.objects.filter(account=account)
         if not categories.exists():
-            return '未找到分类信息'
-        item = [category.id + '. ' + category.name for category in categories]
-        content = '\n'.join(item)
-        reply_content = '可根据分类编号查看具体分类信息\n' + content
-        return reply_content
+            reply_content = '未找到分类信息'
+        else:
+            item = [category.id + '. ' + category.name for category in categories]
+            content = '\n'.join(item)
+            reply_content = '可根据分类编号查看具体分类信息\n' + content
     elif content.isdigit():
         resources = Resources.objects.filter(
             category__account=account, category_id=content.isdigit())
         if not resources.exists():
-            return '未找到该分类下的资源信息'
-        item = ['R' + resource.id + '. ' + resource.name for resource in resources]
-        content = '\n'.join(item)
-        reply_content = '可根据资源编号查询具体资源信息\n' + content
-        return reply_content
+            reply_content = '未找到该分类下的资源信息'
+        else:
+            item = ['R' + resource.id + '. ' + resource.name for resource in resources]
+            content = '\n'.join(item)
+            reply_content = '可根据资源编号查询具体资源信息\n' + content
     elif pattern.match(content):
         resource_id = pattern.match(content).group(2)
         try:
@@ -40,31 +40,32 @@ def handle_text(message):
             if user.free_count:
                 user.free_count = user.free_count - 1
                 user.save()
-                return ' '.join([resource.name,
+                reply_content = ' '.join([resource.name,
                                  resource.share_url, resource.share_password])
             elif user.buy_count:
                 user.free_count = user.free_count - 1
                 user.save()
-                return ' '.join([resource.name,
+                reply_content = ' '.join([resource.name,
                                  resource.share_url, resource.share_password])
             else:
-                return '没有可用额度, 请购买额度获取资源'
+                reply_content = '没有可用额度, 请购买额度获取资源'
         except Resources.DoesNotExist:
-            return '未找到对应的资源信息，请确认是否输入正确'
+            reply_content = '未找到对应的资源信息，请确认是否输入正确'
     else:
         resources = Resources.objects.filter(
             category__account=account, name__icontains=content)
         if not resources.exists():
-            return '未找到该分类下的资源信息'
-        item = ['R' + resource.id + '. ' + resource.name for resource in resources]
-        content = '\n'.join(item)
-        reply_content = '可根据资源编号查询具体资源信息\n' + content
-        return reply_content
+            reply_content = '未找到该分类下的资源信息'
+        else:
+            item = ['R' + resource.id + '. ' + resource.name for resource in resources]
+            content = '\n'.join(item)
+            reply_content = '可根据资源编号查询具体资源信息\n' + content
+    return TextReply(message=message, content=reply_content)
 
 
 @bot.image
 def handle_image(message):
-    pass
+    return TextReply(message=message, content='暂时无法处理图片信息')
 
 
 @bot.subscribe
