@@ -25,7 +25,7 @@ class Account(models.Model):
     related_url = models.CharField(max_length=255, help_text='关联的url地址')
     create_date = models.DateTimeField(auto_now_add=True)
 
-    def __repr__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -41,7 +41,7 @@ class User(models.Model):
     status = models.IntegerField(default=1, help_text='用户状态')
     create_date = models.DateTimeField(auto_now_add=True)
 
-    def __repr__(self):
+    def __str__(self):
         return self.open_id
 
     class Meta:
@@ -65,7 +65,7 @@ class Category(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='categories', help_text='关联账号')
     name = models.CharField(max_length=50, unique=True, help_text='资源分类名称')
 
-    def __repr__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -84,7 +84,7 @@ class Resources(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
 
-    def __repr__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -95,7 +95,7 @@ class Keywords(models.Model):
     """关键字表"""
     name = models.CharField(max_length=50, help_text='关键字名称')
 
-    def __repr__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
