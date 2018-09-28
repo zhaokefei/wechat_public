@@ -1,7 +1,12 @@
 from django.conf.urls import url
-from django.views.decorators.csrf import csrf_exempt
-from wechat import views
+from werobot.contrib.django import make_view
+from werobot import WeRoBot
+
+robot = WeRoBot(
+    token='feifeiwechat',
+    app_id='wxde12b488de883dab',
+    app_secret='7b638241ad308dab37f1f2fe7ea97103')
 
 urlpatterns = [
-    url(r'^$', csrf_exempt(views.WechatRequest.as_view()), name='home')
+    url(r'^$', make_view(robot), name='robot')
 ]
