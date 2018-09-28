@@ -65,12 +65,9 @@ def handle_text(message):
 @bot.subscribe
 def handle_subscribe(message):
     account = Account.objects.get(open_id=message.target)
-    user, created = User.objects.update_or_create(
+    user, _ = User.objects.update_or_create(
         account=account, open_id=message.source,
         defaults={'status': UserStatus.SUBSCRIBE})
-    if created:
-        user.free_count = 10
-        user.save()
     return TextReply(message=message, content=SUBSCRIBE_CONTENT)
 
 

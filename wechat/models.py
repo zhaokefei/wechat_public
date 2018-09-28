@@ -36,7 +36,7 @@ class User(models.Model):
     """用户表"""
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='users', help_text='关联账号')
     open_id = models.CharField(max_length=50)
-    free_count = models.IntegerField(help_text='免费使用额度')
+    free_count = models.IntegerField(default=10, help_text='免费使用额度')
     buy_count = models.IntegerField(default=0, help_text='购买使用额度')
     status = models.IntegerField(default=1, help_text='用户状态')
     create_date = models.DateTimeField(auto_now_add=True)
