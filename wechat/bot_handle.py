@@ -11,7 +11,7 @@ MATCH_PATTERN = r'R(\s*)(\d+)'
 pattern = re.compile(MATCH_PATTERN)
 
 
-@bot.text
+@bot.handler
 def handle_text(message):
     account = Account.objects.get(open_id=message.target)
     user = User.objects.get(open_id=message.source)
@@ -60,7 +60,7 @@ def handle_text(message):
             item = ['R' + resource.id + '. ' + resource.name for resource in resources]
             content = '\n'.join(item)
             reply_content = '可根据资源编号查询具体资源信息\n' + content
-    return reply_content
+    return TextReply(message=message, content=reply_content)
 
 
 @bot.subscribe
@@ -83,8 +83,8 @@ def handle_unsubscribe(message):
         defaults={'status': UserStatus.UNSUBSCRIBE})
 
 
-@bot.handler
-def handle_image(message):
-    return '暂时无法处理图片信息'
+# @bot.handler
+# def handle_image(message):
+#     return '暂时无法处理图片信息'
 
 
