@@ -20,7 +20,7 @@ def handle_text(message):
         if not categories.exists():
             reply_content = '未找到分类信息'
         else:
-            item = [category.id + '. ' + category.name for category in categories]
+            item = [str(category.id) + '. ' + category.name for category in categories]
             content = '\n'.join(item)
             reply_content = '可根据分类编号查看具体分类信息\n' + content
     elif content.isdigit():
@@ -29,13 +29,13 @@ def handle_text(message):
         if not resources.exists():
             reply_content = '未找到该分类下的资源信息'
         else:
-            item = ['R' + resource.id + '. ' + resource.name for resource in resources]
+            item = ['R' + str(resource.id) + '. ' + resource.name for resource in resources]
             content = '\n'.join(item)
             reply_content = '可根据资源编号查询具体资源信息\n' + content
     elif pattern.match(content):
         resource_id = pattern.match(content).group(2)
         try:
-            resource = Resources.objects.get(id=resource_id)
+            resource = Resources.objects.get(id=int(resource_id))
             if user.free_count:
                 user.free_count = user.free_count - 1
                 user.save()
@@ -56,7 +56,7 @@ def handle_text(message):
         if not resources.exists():
             reply_content = '未找到该分类下的资源信息'
         else:
-            item = ['R' + resource.id + '. ' + resource.name for resource in resources]
+            item = ['R' + str(resource.id) + '. ' + resource.name for resource in resources]
             content = '\n'.join(item)
             reply_content = '可根据资源编号查询具体资源信息\n' + content
     return TextReply(message=message, content=reply_content)
