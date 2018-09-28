@@ -11,7 +11,7 @@ MATCH_PATTERN = r'R(\s*)(\d+)'
 pattern = re.compile(MATCH_PATTERN)
 
 
-@bot.handler
+@bot.text
 def handle_text(message):
     account = Account.objects.get(open_id=message.target)
     user = User.objects.get(open_id=message.source)
