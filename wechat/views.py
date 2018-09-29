@@ -35,7 +35,7 @@ def handle_text(message):
     elif content == '购买资源':
         manage_users = ManageUser.objects.filter(account=account)
         if manage_users.exists():
-            qrcode_url = os.path.join(BASE_DIR, manage_users.first().qrcode)
+            qrcode_url = os.path.join(BASE_DIR, manage_users.first().qrcode.url)
             media_id = generate_media('image', qrcode_url)
             if media_id:
                 return ImageReply(message=message, media_id=media_id)
