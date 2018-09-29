@@ -7,7 +7,7 @@ from wechat.urls import robot as bot
 from wechat.models import *
 from wechat_public.settings import BASE_DIR
 
-SUBSCRIBE_CONTENT = """欢迎关注, 输入【功能】查看可支持的功能, \n随意输入字符可视为关键字查询现有资源。\n 免费查看资源额度为3次，如需再次查看，请联系xxx购买资源次数"""
+SUBSCRIBE_CONTENT = """欢迎关注, 输入【功能】查看可支持的功能, \n随意输入字符可视为关键字查询现有资源。\n 免费获取资源额度为3次，如需再次查看，请输入【购买资源】联系客服"""
 FUNCTION_SUPPORT = """输入中括号内字符查看对应的项目\n【分类】: 可查询的资源类目\n【购买资源】: 推送助手微信号，添加购买"""
 MATCH_PATTERN = r'R(\s*)(\d+)'
 DEFAULT_CONTACT = '公众小助手\nzhao546109656'
@@ -75,7 +75,7 @@ def handle_text(message):
                 reply_content = ' '.join([resource.name,
                                  resource.share_url, resource.share_password])
             else:
-                reply_content = '没有可用额度, 请联系xxx购买额度获取资源'
+                reply_content = '没有可用额度, 请输入【购买资源】添加客服，购买额度获取资源'
         except Resources.DoesNotExist:
             reply_content = '未找到对应的资源信息，请确认是否输入正确'
     else:
