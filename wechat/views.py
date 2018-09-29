@@ -5,7 +5,7 @@ from werobot.replies import TextReply
 from wechat.urls import robot as bot
 from wechat.models import *
 
-SUBSCRIBE_CONTENT = """欢迎关注, 输入【功能】查看可支持的功能, \n随意输入字符可视为关键字查询现有资源。\n 免费查看资源额度为10次，如需再次查看，请联系xxx购买资源次数"""
+SUBSCRIBE_CONTENT = """欢迎关注, 输入【功能】查看可支持的功能, \n随意输入字符可视为关键字查询现有资源。\n 免费查看资源额度为3次，如需再次查看，请联系xxx购买资源次数"""
 FUNCTION_SUPPORT = """输入中括号内字符查看对应的项目\n【分类】: 可查询的资源类目"""
 MATCH_PATTERN = r'R(\s*)(\d+)'
 pattern = re.compile(MATCH_PATTERN)
@@ -14,7 +14,7 @@ pattern = re.compile(MATCH_PATTERN)
 @bot.text
 def handle_text(message):
     account = Account.objects.get(open_id=message.target)
-    user = User.objects.get_or_create(open_id=message.source, account=account)
+    user, _ = User.objects.get_or_create(open_id=message.source, account=account)
     content = message.content.strip()
     if content == '功能':
         reply_content = FUNCTION_SUPPORT
@@ -50,7 +50,7 @@ def handle_text(message):
                 reply_content = ' '.join([resource.name,
                                  resource.share_url, resource.share_password])
             else:
-                reply_content = '没有可用额度, 请购买额度获取资源'
+                reply_content = '没有可用额度, 请联系xxx购买额度获取资源'
         except Resources.DoesNotExist:
             reply_content = '未找到对应的资源信息，请确认是否输入正确'
     else:
