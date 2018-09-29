@@ -1,14 +1,28 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
+import os
 import re
-from werobot.replies import TextReply
+from werobot.replies import TextReply, ImageReply
 from wechat.urls import robot as bot
 from wechat.models import *
+from wechat_public.settings import BASE_DIR
 
 SUBSCRIBE_CONTENT = """欢迎关注, 输入【功能】查看可支持的功能, \n随意输入字符可视为关键字查询现有资源。\n 免费查看资源额度为3次，如需再次查看，请联系xxx购买资源次数"""
-FUNCTION_SUPPORT = """输入中括号内字符查看对应的项目\n【分类】: 可查询的资源类目"""
+FUNCTION_SUPPORT = """输入中括号内字符查看对应的项目\n【分类】: 可查询的资源类目\n【购买资源】: 推送助手微信号，添加购买"""
 MATCH_PATTERN = r'R(\s*)(\d+)'
+DEFAULT_CONTACT = '公众小助手\nzhao546109656'
 pattern = re.compile(MATCH_PATTERN)
+
+client = bot.client
+
+
+def generate_media(media_type, media_file):
+    file = open(media_file, 'rb')
+    data = client.upload_media(media_type, file)
+    media_id = data.get('media_id')
+    if media_id:
+        return media_id
+    return False
 
 
 @bot.text
@@ -18,6 +32,17 @@ def handle_text(message):
     content = message.content.strip()
     if content == '功能':
         reply_content = FUNCTION_SUPPORT
+    elif content == '购买资源':
+        manage_users = ManageUser.objects.filter(account=account)
+        if manage_users.exists():
+            qrcode_url = os.path.join(BASE_DIR, manage_users.first().qrcode)
+            media_id = generate_media('image', qrcode_url)
+            if media_id:
+                return ImageReply(message=message, media_id=media_id)
+            else:
+                return TextReply(message=message, content='\n'.join([manage_users.first().name,
+                                                                     manage_users.first().wechat_id]))
+        reply_content = DEFAULT_CONTACT
     elif content == '分类':
         categories = Category.objects.filter(account=account)
         if not categories.exists():
@@ -80,5 +105,6 @@ def handle_unsubscribe(message):
     User.objects.update_or_create(
         account=account, open_id=message.source,
         defaults={'status': UserStatus.UNSUBSCRIBE})
+    return TextReply(message=message, content='欢迎再次关注')
 
 

@@ -115,8 +115,9 @@ class ResourceKeywordsMap(models.Model):
 
 class ManageUser(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='manageUsers', help_text='关联账号')
-    name = models.CharField(max_length=50)
-    qrcode = models.ImageField(upload_to='user_qrcode')
+    name = models.CharField(max_length=50, help_text='管理员名称')
+    wechat_id = models.CharField(max_length=50, default='zhao546109656', help_text='管理员微信号')
+    qrcode = models.ImageField(upload_to='user_qrcode', help_text='管理员二维码')
     create_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
